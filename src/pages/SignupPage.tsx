@@ -12,33 +12,49 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import enums from "../enums/enums";
+import theme from "../components/theme/Theme"
+import EncryptixHeader from "../components/header/EncryptixHeader";
+import { useNavigate } from 'react-router-dom';
 
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const defaultTheme = theme
 
 export default function SignUp() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const navigate = useNavigate();
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        const userName = data.get('userName');
+        const password = data.get('password');
 
-        // do call with data here
+        try {
+            const response = await fetch(`${enums.URL}${enums.PORT}${enums.SIGNUP}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userName,password }),
+            });
+
+            if (response.ok) {
+                // Request was successful, handle success logic here
+                alert('Sign-up successful');
+                navigate('/login');
+            } else {
+                // Request failed, handle error logic here
+                alert('Sign-up failed');
+            }
+        } catch (error) {
+            // Handle network or other errors
+            console.error('Error:', error);
+            alert(error)
+        }
     };
 
     return (
         <ThemeProvider theme={defaultTheme}>
+            <EncryptixHeader></EncryptixHeader>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -88,7 +104,6 @@ export default function SignUp() {
                         Already have an account?
                     </Button>
                 </Box>
-                <Copyright sx={{ mt: 8, mb: 4 }} />
             </Container>
         </ThemeProvider>
     );
