@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {IconButton, List, ListItem, ListItemSecondaryAction} from '@mui/material';
+import {IconButton, List, ListItem, ListItemSecondaryAction, ListItemText} from '@mui/material';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import {Message} from "../../data/Interfaces";
 import enums from "../../enums/enums";
@@ -23,7 +23,7 @@ const MessageList: React.FC<MessageListProps> = () => {
 
         try {
             // Convert Uint8Array to Blob
-            const blob = new Blob([encryptedMessage], { type: 'application/octet-stream' });
+            const blob = new Blob([encryptedMessage], {type: 'application/octet-stream'});
 
             // Rest of the function remains the same...
             const timestampString = timeSent.join('-');
@@ -61,10 +61,6 @@ const MessageList: React.FC<MessageListProps> = () => {
                     },
                 });
 
-                if (!response.ok) {
-                    throw new Error('Failed to fetch messages');
-                }
-
                 const responseData = await response.json();
 
                 // Check if the "Messages" array exists in the response
@@ -93,6 +89,10 @@ const MessageList: React.FC<MessageListProps> = () => {
             ) : (
                 messages.map((message) => (
                     <ListItem key={message.timeSent.join('-')}>
+                        <ListItemText
+                            primary={`Sent at: ${(message.timeSent)}`}
+                            secondary={`Sender: ${message.senderUserName}`}
+                        />
                         <ListItemSecondaryAction>
                             <IconButton
                                 edge="end"

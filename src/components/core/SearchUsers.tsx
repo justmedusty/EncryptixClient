@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {Button, List, ListItem, ListItemText } from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {Button, List, ListItem, ListItemText} from '@mui/material';
 import enums from "../../enums/enums";
 import {getToken} from "../../auth/TokenStorage";
 
@@ -73,7 +73,7 @@ const UserList: React.FC = () => {
                     <List>
                         {users.map((user, index) => (
                             <ListItem key={index}>
-                                <ListItemText primary={user} />
+                                <ListItemText primary={user}/>
                             </ListItem>
                         ))}
                     </List>

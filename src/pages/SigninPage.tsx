@@ -57,7 +57,6 @@ export default function SignIn() {
                 saveToken(accessToken);
                 console.log('Authentication successful! Token:', accessToken);
                 navigate('/dashboard')
-                alert('Authentication successful!');
             } else {
                 setError('Token not found in the response.');
                 alert('Token not found in the response.');
