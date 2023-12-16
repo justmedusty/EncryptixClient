@@ -65,14 +65,15 @@ const MessageList: React.FC = () => {
             // Decode Base64 to binary data
             const binaryData = atob(base64EncodedMessage);
 
-            // Create Uint8Array from binary data
-            const uint8Array = new Uint8Array(binaryData.length);
+            // Convert binary string to ArrayBuffer
+            const arrayBuffer = new ArrayBuffer(binaryData.length);
+            const uint8Array = new Uint8Array(arrayBuffer);
             for (let i = 0; i < binaryData.length; i++) {
                 uint8Array[i] = binaryData.charCodeAt(i);
             }
 
-            // Create Blob with specific MIME type
-            const blob = new Blob([uint8Array]);
+            // Create Blob with a specific MIME type
+            const blob = new Blob([arrayBuffer], { type: 'application/octet-binary' });
 
             // Create a timestamp string
             const timestampString = timeSent.join('-');
@@ -100,7 +101,6 @@ const MessageList: React.FC = () => {
             console.error('Error handling Base64-encoded message:', error);
         }
     };
-
     const fetchMessageData = async (page: number) => {
         try {
             const messagesUrl = `${enums.URL}${enums.PORT}${enums.FETCH_ALL_MESSAGES}?page=${page}`;
