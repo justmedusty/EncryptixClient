@@ -15,24 +15,35 @@ const MessageList: React.FC<MessageListProps> = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [loading, setLoading] = useState(false);
 
-    const handleDownload = (file: Blob, fileName: string) => {
-        // Create object URL
-        const blobUrl = URL.createObjectURL(file);
+    const handleDownload = async (encryptedMessage: Uint8Array | null, timeSent: number[], senderUserName: string) => {
+        if (!encryptedMessage) {
+            console.error('Invalid encrypted message');
+            return;
+        }
 
-        // Create download link
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = fileName;
+        try {
+            // Convert Uint8Array to Blob
+            const blob = new Blob([encryptedMessage], { type: 'application/octet-stream' });
 
-        // Append link to the DOM, trigger click, and remove link
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+            // Rest of the function remains the same...
+            const timestampString = timeSent.join('-');
+            const fileName = `message_${timestampString}_${senderUserName}.gpg`;
 
-        // Revoke object URL to free up resources
-        URL.revokeObjectURL(blobUrl);
+            const blobUrl = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = fileName;
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            URL.revokeObjectURL(blobUrl);
+        } catch (error) {
+            console.error('Error handling encrypted message:', error);
+        }
     };
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -81,12 +92,12 @@ const MessageList: React.FC<MessageListProps> = () => {
                 <p>Loading messages...</p>
             ) : (
                 messages.map((message) => (
-                    <ListItem key={message.id}>
+                    <ListItem key={message.timeSent.join('-')}>
                         <ListItemSecondaryAction>
                             <IconButton
                                 edge="end"
                                 aria-label="download"
-                                onClick={() => handleDownload(message.file, `message_${message.id}.gpg`)}
+                                onClick={() => handleDownload(message.encryptedMessage, message.timeSent, message.senderUserName)}
                             >
                                 <CloudDownloadIcon />
                             </IconButton>

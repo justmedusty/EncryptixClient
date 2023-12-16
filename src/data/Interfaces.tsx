@@ -1,5 +1,7 @@
 
 export interface Message {
-    id: number;
-    file: Blob;
+    timeSent: number[];
+    senderUserName: string
+    recieverUserName: string
+    encryptedMessage: Uint8Array;
 }
