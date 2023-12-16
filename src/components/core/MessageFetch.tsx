@@ -65,15 +65,14 @@ const MessageList: React.FC = () => {
             // Decode Base64 to binary data
             const binaryData = atob(base64EncodedMessage);
 
-            // Convert binary string to ArrayBuffer
-            const arrayBuffer = new ArrayBuffer(binaryData.length);
-            const uint8Array = new Uint8Array(arrayBuffer);
+            // Convert binary string to bytes
+            const bytes = new Uint8Array(binaryData.length);
             for (let i = 0; i < binaryData.length; i++) {
-                uint8Array[i] = binaryData.charCodeAt(i);
+                bytes[i] = binaryData.charCodeAt(i);
             }
 
-            // Create Blob with a specific MIME type
-            const blob = new Blob([arrayBuffer], { type: 'application/octet-binary' });
+            // Convert bytes to a data URI
+            const dataUri = `data:application/pgp;base64,${btoa(String.fromCharCode.apply(null, Array.from(bytes)))}`;
 
             // Create a timestamp string
             const timestampString = timeSent.join('-');
@@ -82,10 +81,8 @@ const MessageList: React.FC = () => {
             const fileName = `message_${timestampString}_${senderUserName}.gpg`;
 
             // Create download link
-            const blobUrl = URL.createObjectURL(blob);
-
             const link = document.createElement('a');
-            link.href = blobUrl;
+            link.href = dataUri;
             link.download = fileName;
 
             // Append link to the body and trigger a click
@@ -94,9 +91,6 @@ const MessageList: React.FC = () => {
 
             // Remove the link from the body
             document.body.removeChild(link);
-
-            // Revoke the object URL to free up resources
-            URL.revokeObjectURL(blobUrl);
         } catch (error) {
             console.error('Error handling Base64-encoded message:', error);
         }
