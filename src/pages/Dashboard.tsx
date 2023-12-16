@@ -6,6 +6,7 @@ import {deleteToken} from "../auth/TokenStorage";
 import EncryptixHeader from "../components/header/EncryptixHeader";
 import MessageList from "../components/core/MessageFetch";
 import UserList from "../components/core/SearchUsers";
+import AccountSettings from "../components/core/AccountSettings";
 
 const DashboardPage: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -32,7 +33,7 @@ const DashboardPage: React.FC = () => {
                 </Typography>
 
                 {selectedTab === 0 && <MessageList></MessageList>}
-                {selectedTab === 1 && <div>Account Settings</div>}
+                {selectedTab === 1 && <AccountSettings/>}
                 {selectedTab === 2 && <UserList/>}
             </Paper>
             <Button onClick={deleteToken} href={'/login'}>
