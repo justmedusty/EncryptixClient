@@ -6,6 +6,7 @@ import SignUp from "./pages/SignupPage";
 import {theme} from "@chakra-ui/react";
 import {ThemeProvider} from "@mui/material/styles";
 import Dashboard from "./pages/Dashboard";
+import {ToastContainer} from "react-toastify";
 
 const App: React.FC = () => {
     /* Add more routes as needed */
@@ -19,6 +20,17 @@ const App: React.FC = () => {
                     <Route path="/dashboard" element={<Dashboard/>}></Route>
                 </Routes>
             </Router>
+            <ToastContainer
+                position="top-right"
+                autoClose={2000} // Adjust the auto-close duration as needed
+                hideProgressBar={false}
+                closeOnClick
+                pauseOnHover
+                closeButton={true}
+                draggable={true}
+                newestOnTop={true}
+                theme={"colored"}
+            />
         </ThemeProvider>
     );
 };
