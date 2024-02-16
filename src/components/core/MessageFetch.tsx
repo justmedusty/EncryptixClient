@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import List from '@mui/material/List';
+import SendIcon from '@mui/icons-material/Send';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
@@ -107,6 +108,10 @@ const MessageList: React.FC = () => {
         }
     };
 
+    const handleSendMessage = () => {
+
+    }
+
     const handleNextPage = () => {
         setCurrentPage((prevPage) => prevPage + 1);
     };
@@ -127,33 +132,39 @@ const MessageList: React.FC = () => {
             {loading ? (
                 <p>Loading messages...</p>
             ) : (
-                <div>
-                    <List>
-                        {messages.map((message) => (
-                            <ListItem key={message.timeSent.join('-')}>
-                                <ListItemText
-                                    primary={`Sent at: ${(message.timeSent)}`}
-                                    secondary={`Sender: ${message.senderUserName}`}
-                                />
-                                <ListItemSecondaryAction>
-                                    <IconButton
-                                        edge="end"
-                                        aria-label="download"
-                                        onClick={() => handleDownload(message.encryptedMessage, message.timeSent, message.senderUserName)}
-                                    >
-                                        <CloudDownloadIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <div>
-                        <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
-                            Previous Page
+                <>
+                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-end'}}>
+                        <Button variant="contained" endIcon={<SendIcon/>}>
+                            Send
                         </Button>
-                        <Button onClick={handleNextPage}>Next Page</Button>
                     </div>
-                </div>
+                    <div>
+                        <List>
+                            {messages.map((message) => (
+                                <ListItem key={message.timeSent.join('-')}>
+                                    <ListItemText
+                                        primary={`Sent at: ${(message.timeSent)}`}
+                                        secondary={`Sender: ${message.senderUserName}`}/>
+                                    <ListItemSecondaryAction>
+                                        <IconButton
+                                            edge="end"
+                                            aria-label="download"
+                                            onClick={() => handleDownload(message.encryptedMessage, message.timeSent, message.senderUserName)}
+                                        >
+                                            <CloudDownloadIcon/>
+                                        </IconButton>
+                                    </ListItemSecondaryAction>
+                                </ListItem>
+                            ))}
+                        </List>
+                        <div>
+                            <Button onClick={handlePreviousPage} disabled={currentPage === 1}>
+                                Previous Page
+                            </Button>
+                            <Button onClick={handleNextPage}>Next Page</Button>
+                        </div>
+                    </div>
+                </>
             )}
         </div>
     );

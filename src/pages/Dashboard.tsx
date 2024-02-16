@@ -7,6 +7,7 @@ import EncryptixHeader from "../components/header/EncryptixHeader";
 import MessageList from "../components/core/MessageFetch";
 import UserList from "../components/core/SearchUsers";
 import AccountSettings from "../components/core/AccountSettings";
+import MessageSend from "../components/core/MessageSend";
 
 const DashboardPage: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState(0);
@@ -22,8 +23,10 @@ const DashboardPage: React.FC = () => {
             <AppBar position="static">
                 <Tabs value={selectedTab} onChange={handleTabChange} centered indicatorColor="secondary" textColor={"secondary"}>
                     <Tab label="View Messages"/>
+                    <Tab label={"Send Message"}/>
                     <Tab label="Account Settings" />
                     <Tab label="Search Users" />
+
                 </Tabs>
             </AppBar>
 
@@ -33,8 +36,10 @@ const DashboardPage: React.FC = () => {
                 </Typography>
 
                 {selectedTab === 0 && <MessageList></MessageList>}
-                {selectedTab === 1 && <AccountSettings/>}
-                {selectedTab === 2 && <UserList/>}
+                {selectedTab === 1 && <MessageSend/>}
+                {selectedTab === 2 && <AccountSettings/>}
+                {selectedTab === 3 && <UserList/>}
+
             </Paper>
             <Button onClick={deleteToken} href={'/login'}>
                 Logout

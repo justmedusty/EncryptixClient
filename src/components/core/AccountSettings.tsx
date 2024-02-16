@@ -113,7 +113,6 @@ const UpdatePublicKeyForm: React.FC<UpdatePublicKeyFormProps> = ({onSubmit}) => 
 };
 
 const AccountSettings: React.FC = () => {
-    const apiUrl = 'YOUR_API_ENDPOINT'; // Replace with your actual API endpoint
 
     const handleUsernameSubmit = async ({newUser}: { newUser: string }): Promise<void> => {
         try {
