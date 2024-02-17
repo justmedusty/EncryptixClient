@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import enums from "../enums/enums";
-import {saveToken} from "../auth/TokenStorage";
+import {saveToken, saveTokenWithAutoDelete} from "../auth/TokenStorage";
 import {useState} from "react";
 import EncryptixHeader from "../components/header/EncryptixHeader";
 import theme from "../components/theme/Theme";
@@ -54,7 +54,7 @@ export default function SignIn() {
             const accessToken = responseData.access_token;
 
             if (accessToken) {
-                saveToken(accessToken);
+                saveTokenWithAutoDelete(accessToken);
                 console.log('Authentication successful! Token:', accessToken);
                 navigate('/dashboard')
             } else {

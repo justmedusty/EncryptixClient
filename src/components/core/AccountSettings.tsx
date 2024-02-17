@@ -133,8 +133,7 @@ const AccountSettings: React.FC = () => {
                 throw new Error(`Failed to update username: ${response.statusText}`);
             }
 
-            console.log('Username updated successfully!');
-
+            alert('Username updated successfully!');
         } catch (error) {
             console.error('Error updating username:', error);
         }
@@ -156,11 +155,11 @@ const AccountSettings: React.FC = () => {
             });
 
             if (!response.ok) {
-                toast.error("Error on password update : " + response.statusText)
+                alert("Error on password update : " + response.statusText)
                 throw new Error(`Failed to update password: ${response.statusText}`);
             }
 
-            toast.success("Successfully created password")
+            alert("Successfully created password")
             console.log('Password updated successfully!');
         } catch (error) {
             console.error('Error updating password:', error);
@@ -183,7 +182,7 @@ const AccountSettings: React.FC = () => {
             });
 
             if (!response.ok) {
-                toast.error("Failed to update public key:" + response.statusText)
+                alert("Failed to update public key:" + response.statusText)
                 throw new Error(`Failed to update public key: ${response.statusText}`);
 
             }

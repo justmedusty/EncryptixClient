@@ -33,6 +33,8 @@ export const getToken = (): string | null => {
 export const deleteToken = () => {
     localStorage.removeItem('accessToken');
     console.log('Token deleted');
+    alert("Your Session Has Expired")
+    window.location.href = '/login';
 };
 
 // Automatically delete token after 5 minutes on token update
