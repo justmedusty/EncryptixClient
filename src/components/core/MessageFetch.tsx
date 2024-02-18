@@ -133,11 +133,6 @@ const MessageList: React.FC = () => {
                 <p>Loading messages...</p>
             ) : (
                 <>
-                    <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-end'}}>
-                        <Button variant="contained" endIcon={<SendIcon/>}>
-                            Send
-                        </Button>
-                    </div>
                     <div>
                         <List>
                             {messages.map((message) => (

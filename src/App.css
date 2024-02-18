@@ -9,22 +9,3 @@
   min-height: 100vh;
   min-width: 100vh;
 }
-.Toastify__toast-container {
-  position: fixed;
-  bottom: 20px; /* Adjust the distance from the bottom as needed */
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  max-width: 100px; /* Adjust the maximum width as needed */
-}
-
-/* Custom styles for individual toasts */
-.Toastify__toast {
-  font-size: 16px; /* Adjust the font size as needed */
-  padding: 15px;
-  margin-bottom: 15px; /* Adjust the margin between toasts as needed */
-  background-color: purple; /* Adjust the background color as needed */
-  color: #fff; /* Adjust the text color as needed */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
