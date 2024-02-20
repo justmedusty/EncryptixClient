@@ -1,14 +1,33 @@
 import React, { useState } from 'react';
 import enums from "../../enums/enums";
-import {Button, TextField} from "@mui/material";
+import {Alert, Button, Snackbar, TextField} from "@mui/material";
 import {getToken} from "../../auth/TokenStorage";
 
 const MessageSendMenu = () => {
     const [receiver, setReceiver] = useState('');
     const [message, setMessage] = useState('');
+    const [messageSent, setMessageSent] = useState(false)
+    const [messageFailed, setMessageFailed] = useState(false)
 
     const sendMessage = async () => {
         const token = getToken(); // Make sure to define getToken function
+
+        const messageSuccess = () => {
+            setMessageSent(true); // Update state inside the event handler
+
+            setTimeout(() => {
+                setMessageSent(false); // Update state again after delay
+            }, 4000); // Or any duration you prefer
+        };
+
+        const messageFailed = () => {
+            setMessageFailed(true); // Update state inside the event handler
+
+            setTimeout(() => {
+                setMessageFailed(false); // Update state again after delay
+            }, 4000); // Or any duration you prefer
+        };
+
 
         const requestBody = new URLSearchParams();
         requestBody.append('message', message);
@@ -27,10 +46,10 @@ const MessageSendMenu = () => {
             const response = await fetch(enums.URL + enums.PORT + enums.SEND_MESSAGE, requestOptions);
             if (response.ok) {
                 console.log('Message sent successfully');
-                alert('Message sent!');
+                messageSuccess()
             } else {
                 console.error('Failed to send message');
-                alert('Failed to send message, check that you have a public key uploaded and that the recipient has one as well');
+                messageFailed()
                 // Handle error cases
             }
         } catch (error) {
@@ -41,6 +60,12 @@ const MessageSendMenu = () => {
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <Snackbar open={messageSent} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+                <Alert severity="success">Message Sent!</Alert>
+            </Snackbar>
+            <Snackbar open={messageFailed} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+                <Alert severity="error">Failed to send message, check that you have a public key uploaded and that the recipient has one as well</Alert>
+            </Snackbar>
             <TextField
                 id="receiver"
                 label="Receiver"

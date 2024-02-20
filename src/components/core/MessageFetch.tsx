@@ -11,6 +11,8 @@ import enums from "../../enums/enums"; // Replace with the correct path
 import { useNavigate } from 'react-router-dom';
 import {getToken} from "../../auth/TokenStorage";
 import {Button} from "@mui/material";
+import {Quickreply, ReplyAll, ReplyOutlined, ReplySharp} from "@mui/icons-material";
+import theme from "../theme/Theme";
 
 interface Message {
     timeSent: number[];
@@ -55,6 +57,7 @@ const MessageList: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+
 
     const handleDownload = (base64EncodedMessage: string, timeSent: number[], senderUserName: string) => {
         try {
@@ -138,16 +141,21 @@ const MessageList: React.FC = () => {
                             {messages.map((message) => (
                                 <ListItem key={message.timeSent.join('-')}>
                                     <ListItemText
-                                        primary={`Sent at: ${(message.timeSent)}`}
-                                        secondary={`Sender: ${message.senderUserName}`}/>
+                                        secondary={`Sent at: ${(message.timeSent.join('-'))}`}
+                                        primary={`From: ${message.senderUserName}`}/>
                                     <ListItemSecondaryAction>
+                                        <IconButton style={{marginLeft: '5px'}}>t
+                                            <ReplyOutlined/>
+                                        </IconButton>
                                         <IconButton
                                             edge="end"
                                             aria-label="download"
                                             onClick={() => handleDownload(message.encryptedMessage, message.timeSent, message.senderUserName)}
+                                            style={{marginRight: ('10px')}} // Added margin right
                                         >
-                                            <CloudDownloadIcon/>
+                                            <CloudDownloadIcon />
                                         </IconButton>
+
                                     </ListItemSecondaryAction>
                                 </ListItem>
                             ))}

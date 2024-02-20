@@ -41,6 +41,7 @@ const DashboardPage: React.FC = () => {
                 {selectedTab === 3 && <UserList/>}
 
             </Paper>
+
             <Button onClick={deleteToken} href={'/login'}>
                 Logout
             </Button>

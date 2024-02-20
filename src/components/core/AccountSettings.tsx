@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {Button, Container, Grid, Paper, TextField, Typography} from '@mui/material';
 import {getToken} from "../../auth/TokenStorage";
 import enums from "../../enums/enums";
-import {toast} from "react-toastify";
 
 interface UpdateUsernameFormProps {
     onSubmit: (data: { newUser: string }) => void;
@@ -112,6 +111,7 @@ const UpdatePublicKeyForm: React.FC<UpdatePublicKeyFormProps> = ({onSubmit}) => 
     );
 };
 
+
 const AccountSettings: React.FC = () => {
 
     const handleUsernameSubmit = async ({newUser}: { newUser: string }): Promise<void> => {
@@ -136,6 +136,7 @@ const AccountSettings: React.FC = () => {
             alert('Username updated successfully!');
         } catch (error) {
             console.error('Error updating username:', error);
+            alert('Error updating username')
         }
     };
 
@@ -185,10 +186,9 @@ const AccountSettings: React.FC = () => {
                 alert("Failed to update public key:" + response.statusText)
                 throw new Error(`Failed to update public key: ${response.statusText}`);
 
+
             }
-
-            toast.success("Successfully updated public key")
-
+            alert('Public key updated successfully!')
             console.log('Public key updated successfully!');
         } catch (error) {
             console.error('Error updating public key:', error);

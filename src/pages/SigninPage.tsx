@@ -7,14 +7,14 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 import enums from "../enums/enums";
-import {saveToken, saveTokenWithAutoDelete} from "../auth/TokenStorage";
+import { saveTokenWithAutoDelete} from "../auth/TokenStorage";
 import {useState} from "react";
 import EncryptixHeader from "../components/header/EncryptixHeader";
 import theme from "../components/theme/Theme";
 import {useNavigate} from "react-router-dom";
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import { Alert, Snackbar } from '@mui/material';
 
 
 
@@ -24,8 +24,19 @@ const defaultTheme =theme
 export default function SignIn() {
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const [loginFailed, setLoginFailed] = useState(false)
 
-    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+
+
+    const handleLoginFailure = () => {
+        setLoginFailed(true); // Update state inside the event handler
+
+        setTimeout(() => {
+            setLoginFailed(false); // Update state again after delay
+        }, 4000); // Or any duration you prefer
+    };
+
+        const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
@@ -44,7 +55,7 @@ export default function SignIn() {
             if (!response.ok) {
                 // Handle authentication error
                 setError('Authentication failed. Please check your credentials.');
-                alert('Authentication failed. Please check your credentials.');
+                handleLoginFailure()
                 return;
             }
 
@@ -102,6 +113,9 @@ export default function SignIn() {
                         Sign in
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
+                        <Snackbar open={loginFailed} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+                            <Alert severity="error">Invalid Credentials Please Try Again</Alert>
+                        </Snackbar>
                         <TextField
                             margin="normal"
                             required
@@ -131,10 +145,14 @@ export default function SignIn() {
                             Sign In
                         </Button>
                     </Box>
+
                     <Button href="/signup" variant="contained">
                         Don't have an account?
-                    </Button></Box>
+                    </Button>
+                </Box>
+
             </Container>
+
         </ThemeProvider>
     );
 }

@@ -12,7 +12,9 @@ const ENUMS = {
     UPLOAD_NEW_KEY: '/app/key/upload',
     SEARCH_USERS: '/app/users/search',
     FETCH_USERS: '/app/users/fetch',
-    URL:'http://127.0.0.1',
+    //URL:'http://zar3tty46qqwwqcbfxezttbumaowebswwsynwegbrn4yfjkr4ezqvqqd.onion',
+    //URL: 'http://mkwvtl5vcufuxxhtrx4xl3syp4ynzgu6d5egezaxvqik5a34j4mntfyd.onion',
+    URL: 'http://127.0.0.1',
     PORT:':6969'
 
 
