@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import {Button, Container, Grid, Paper, TextField, Typography} from '@mui/material';
+import {Box, Button, Container, Grid, Paper, Tab, Tabs, TextField, Typography} from '@mui/material';
 import {getToken} from "../../auth/TokenStorage";
 import enums from "../../enums/enums";
+
 
 interface UpdateUsernameFormProps {
     onSubmit: (data: { newUser: string }) => void;
@@ -194,23 +195,35 @@ const AccountSettings: React.FC = () => {
             console.error('Error updating public key:', error);
         }
     };
+    const [tabValue, setTabValue] = useState(0);
+
+    const handleChange = (event: any, newValue: React.SetStateAction<number>) => {
+        setTabValue(newValue);
+    };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <Paper elevation={3} style={{
-                padding: 16,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                margin: '16px 0'
-            }}>
-                <Typography variant="h5">Account Settings</Typography>
-                <div style={{marginBottom: '16px'}}></div>
-                <UpdateUsernameForm onSubmit={handleUsernameSubmit}/>
-                <div style={{marginBottom: '16px'}}></div>
-                <UpdatePasswordForm onSubmit={handlePasswordSubmit}/>
-                <div style={{marginBottom: '16px'}}></div>
-                <UpdatePublicKeyForm onSubmit={handlePublicKeySubmit}/>
+        <Container className={'main'} component="main" maxWidth="sm">
+            <Paper elevation={3}>
+                <Box p={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Tabs value={tabValue} onChange={handleChange} >
+                        <Tab label="Username" />
+                        <Tab label="Password" />
+                        <Tab label="Public Key" />
+                    </Tabs>
+                </Box>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <Paper elevation={3} style={{padding: 16}}>
+                            <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center' }}>{tabValue === 0 && 'Update Username'}
+                                {tabValue === 1 && 'Update Password'}
+                                {tabValue === 2 && 'Update Public Key'}
+                            </Typography>
+                            {tabValue === 0 && <UpdateUsernameForm onSubmit={handleUsernameSubmit} />}
+                            {tabValue === 1 && <UpdatePasswordForm onSubmit={handlePasswordSubmit} />}
+                            {tabValue === 2 && <UpdatePublicKeyForm onSubmit={handlePublicKeySubmit} />}
+                        </Paper>
+                    </Grid>
+                </Grid>
             </Paper>
         </Container>
     );

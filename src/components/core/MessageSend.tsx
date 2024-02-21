@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import enums from "../../enums/enums";
-import {Alert, Button, Snackbar, TextField} from "@mui/material";
+import {Alert, Autocomplete, Button, debounce, MenuItem, Snackbar, TextField} from "@mui/material";
 import {getToken} from "../../auth/TokenStorage";
 
 const MessageSendMenu = () => {
@@ -8,6 +8,48 @@ const MessageSendMenu = () => {
     const [message, setMessage] = useState('');
     const [messageSent, setMessageSent] = useState(false)
     const [messageFailed, setMessageFailed] = useState(false)
+    const [availableReceivers, setAvailableReceivers] = useState([])
+
+
+    const fetchAvailableReceivers = async (query : string, limit : string) => {
+        const authToken = getToken();
+
+        const queryParams = new URLSearchParams({
+            query: query,
+            limit: limit
+        });
+
+        const url = enums.URL + enums.PORT + enums.SEARCH_USERS + '?' + queryParams;
+
+        try {
+            const response = await fetch(url,{
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            })
+            if (response.ok) {
+                const data = await response.json();
+                setAvailableReceivers(data.users);
+            } else {
+                console.error('Failed to fetch receivers');
+            }
+        } catch (error) {
+            console.error('Error fetching receivers:', error);
+        }
+    };
+
+    const handleInputChange = debounce((query) => {
+        if (!query!= null){
+            fetchAvailableReceivers(query, "5")
+                .then(() => {
+                    console.log('Fetch successful'); // Log success message
+                })
+                .catch((error) => {
+                    console.error('Error fetching receivers:', error); // Log error message
+                });
+        }
+
+    }, 100);
 
     const sendMessage = async () => {
         const token = getToken(); // Make sure to define getToken function
@@ -66,21 +108,35 @@ const MessageSendMenu = () => {
             <Snackbar open={messageFailed} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
                 <Alert severity="error">Failed to send message, check that you have a public key uploaded and that the recipient has one as well</Alert>
             </Snackbar>
-            <TextField
+            <Autocomplete
                 id="receiver"
-                label="Receiver"
+                options={availableReceivers}
+                freeSolo
                 value={receiver}
-                onChange={(e) => setReceiver(e.target.value)}
-                style={{marginBottom: '15px'}}
+                onChange={(_, newValue) => {
+                    if (!newValue) {
+                        setReceiver('');
+                    } else {
+                        setReceiver(newValue as string);
+                    }
+                }}
+                onInputChange={(e, value) => handleInputChange(value)} // Trigger handleInputChange on every input change
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        label="Receiver"
+                        style={{ marginBottom: '20px', width: '300px' }} // Adjust width as needed
+                    />
+                )}
             />
             <TextField
                 id="message"
                 label="Message"
                 multiline
-                rows={4}
+                rows={15}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                style={{marginBottom: '15px'}}
+                style={{marginBottom: '20px', width:'800px' ,minHeight: '300px'}}
             />
             <Button variant="contained" onClick={sendMessage}>Send Message</Button>
         </div>

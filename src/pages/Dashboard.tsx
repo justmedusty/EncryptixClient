@@ -31,9 +31,6 @@ const DashboardPage: React.FC = () => {
             </AppBar>
 
             <Paper style={{ padding: '16px', marginTop: '16px' }}>
-                <Typography variant="h4" gutterBottom>
-                    Dashboard Page
-                </Typography>
 
                 {selectedTab === 0 && <MessageList></MessageList>}
                 {selectedTab === 1 && <MessageSend/>}
