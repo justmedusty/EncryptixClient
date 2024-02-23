@@ -14,10 +14,10 @@ const ENUMS = {
     FETCH_USERS: '/app/users/fetch',
     //URL:'http://zar3tty46qqwwqcbfxezttbumaowebswwsynwegbrn4yfjkr4ezqvqqd.onion',
     //URL: 'http://mkwvtl5vcufuxxhtrx4xl3syp4ynzgu6d5egezaxvqik5a34j4mntfyd.onion',
+    //URL: 'http://fxrs5p2pcw47hy6y7o2tgzanmms4ozt7fgfhhtjc2bffliy6ahzmqkqd.onion', //1
+    //URL: 'http://rfocekyg734pio6djwunr4j6a7kdutgzux7mm5npy33azjwcocfslkad.onion', //2
     URL: 'http://127.0.0.1',
     PORT:':6969'
-
-
 
     // Add more endpoints as needed
 };

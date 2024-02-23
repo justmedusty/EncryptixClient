@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {Box, Button, Container, Grid, Paper, Tab, Tabs, TextField, Typography} from '@mui/material';
-import {getToken} from "../../auth/TokenStorage";
+import React, {useEffect, useState} from 'react';
+import {Box, Button, Checkbox, Container, Grid, Paper, Tab, Tabs, TextField, Typography} from '@mui/material';
+import {deleteToken, getToken} from "../../auth/TokenStorage";
 import enums from "../../enums/enums";
 
 
@@ -131,7 +131,6 @@ const AccountSettings: React.FC = () => {
             });
 
             if (!response.ok) {
-                throw new Error(`Failed to update username: ${response.statusText}`);
             }
 
             alert('Username updated successfully!');
@@ -158,7 +157,6 @@ const AccountSettings: React.FC = () => {
 
             if (!response.ok) {
                 alert("Error on password update : " + response.statusText)
-                throw new Error(`Failed to update password: ${response.statusText}`);
             }
 
             alert("Successfully created password")
@@ -185,7 +183,6 @@ const AccountSettings: React.FC = () => {
 
             if (!response.ok) {
                 alert("Failed to update public key:" + response.statusText)
-                throw new Error(`Failed to update public key: ${response.statusText}`);
 
 
             }
@@ -201,26 +198,112 @@ const AccountSettings: React.FC = () => {
         setTabValue(newValue);
     };
 
+    const ViewPublicKey: React.FunctionComponent = () => {
+        const [publicKey, setPublicKey] = useState();
+        const token = getToken();
+
+        useEffect(() => {
+            const fetchData = async () => {
+                try {
+                    const response = await fetch(enums.URL + enums.PORT + enums.GET_MY_KEY, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    if (!response.ok) {
+                    }
+                    const data = await response.json();
+                    setPublicKey(data['Response']);
+                } catch (error) {
+                    alert("an error occurred");
+                }
+            };
+
+            fetchData();
+        }, [token]);
+
+
+        return(
+            <Container>
+               <Typography>{publicKey}</Typography>
+            </Container>
+        )
+    }
+
+
+    const DeleteAccount: React.FunctionComponent = () => {
+        const [isChecked, setIsChecked] = useState(false);
+        const token = getToken();
+
+            const deleteAccount = async () => {
+                if (isChecked) {
+                    try {
+                        const response = await fetch(enums.URL + enums.PORT + enums.DELETE_ACCOUNT, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${token}`,
+                            },
+                        });
+                        if (!response.ok) {
+                            alert(response.status)
+                        }
+                        else{
+                            alert(response.status)
+                        }
+
+
+                    } catch (error) {
+                        alert("an error occurred");
+                    }
+                } else {
+                    alert("You must click the checkbox to confirm before you delete")
+                }
+            }
+        return(
+            <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <Box sx={{ width: "50%" }}>
+                    <Checkbox onChange={event => setIsChecked(event.target.checked)} checked={isChecked}/>
+                    <Button color="primary" type="button" onClick={deleteAccount}>
+                        Delete
+                    </Button>
+                </Box>
+            </Container>
+        )
+    }
+
     return (
-        <Container className={'main'} component="main" maxWidth="sm">
-            <Paper elevation={3}>
+
+        <Container className={'main'} component="main" maxWidth="md">
+            <Paper elevation={3} sx={{ maxWidth: 'xl', margin: 'auto' }}>
                 <Box p={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Tabs value={tabValue} onChange={handleChange} >
-                        <Tab label="Username" />
-                        <Tab label="Password" />
-                        <Tab label="Public Key" />
+                    <Tabs value={tabValue} onChange={handleChange}>
+                        <Tab label="Change Username"/>
+                        <Tab label="Change Password"/>
+                        <Tab label="Change Public Key"/>
+                        <Tab label="View Public Key"/>
+                        <Tab label="Delete Account"/>
                     </Tabs>
                 </Box>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Paper elevation={3} style={{padding: 16}}>
-                            <Typography variant="h5" sx={{ display: 'flex', justifyContent: 'center' }}>{tabValue === 0 && 'Update Username'}
+                            <Typography variant="h5" sx={{
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }}>{tabValue === 0 && 'Update Username'}
                                 {tabValue === 1 && 'Update Password'}
                                 {tabValue === 2 && 'Update Public Key'}
+                                {tabValue === 3 && 'View Public Key'}
+                                {tabValue === 4 && 'Delete Account'}
                             </Typography>
-                            {tabValue === 0 && <UpdateUsernameForm onSubmit={handleUsernameSubmit} />}
-                            {tabValue === 1 && <UpdatePasswordForm onSubmit={handlePasswordSubmit} />}
-                            {tabValue === 2 && <UpdatePublicKeyForm onSubmit={handlePublicKeySubmit} />}
+                            {tabValue === 0 && <UpdateUsernameForm onSubmit={handleUsernameSubmit}/>}
+                            {tabValue === 1 && <UpdatePasswordForm onSubmit={handlePasswordSubmit}/>}
+                            {tabValue === 2 && <UpdatePublicKeyForm onSubmit={handlePublicKeySubmit}/>}
+                            {tabValue === 3 && <ViewPublicKey/>}
+                            {tabValue === 4 && <DeleteAccount></DeleteAccount>}
                         </Paper>
                     </Grid>
                 </Grid>

@@ -13,8 +13,9 @@ import enums from "../enums/enums";
 import theme from "../components/theme/Theme"
 import EncryptixHeader from "../components/header/EncryptixHeader";
 import {useNavigate} from 'react-router-dom';
-import {Alert, Snackbar} from "@mui/material";
+import {Alert, Snackbar, SnackbarContent} from "@mui/material";
 import {wait} from "@testing-library/user-event/dist/utils";
+import {Info} from "@mui/icons-material";
 
 const defaultTheme = theme
 
@@ -133,6 +134,7 @@ export default function SignUp() {
                         Already have an account?
                     </Button>
                 </Box>
+
 
             </Container>
 
