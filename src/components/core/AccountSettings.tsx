@@ -23,7 +23,8 @@ const UpdatePublicKeyForm: React.FC<UpdatePublicKeyFormProps> = ({onSubmit}) => 
 
 
     const handleSubmit = async (e: React.FormEvent) => {
-        onSubmit({publicKey: publicKey});
+        e.preventDefault()
+        onSubmit({publicKey});
         setNewPublicKey('')
     };
 
@@ -211,6 +212,7 @@ const AccountSettings: React.FC = () => {
 
         } catch (error) {
             console.error('Error updating public key:', error);
+            alert('Error updating username')
         }
     };
 
