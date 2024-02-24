@@ -12,7 +12,7 @@ import {ThemeProvider} from '@mui/material/styles';
 import enums from "../enums/enums";
 import theme from "../components/theme/Theme"
 import EncryptixHeader from "../components/header/EncryptixHeader";
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {Alert, Snackbar, SnackbarContent} from "@mui/material";
 import {wait} from "@testing-library/user-event/dist/utils";
 import {Info} from "@mui/icons-material";
@@ -111,6 +111,7 @@ export default function SignUp() {
                             label="Username"
                             name="userName"
                             autoFocus
+                            inputProps={{ maxLength: 100 }}
                         />
                         <TextField
                             margin="normal"
@@ -121,6 +122,7 @@ export default function SignUp() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            inputProps={{ maxLength: 100 }}
                         />
                         <Button
                             type="submit"
@@ -135,8 +137,9 @@ export default function SignUp() {
                         Already have an account?
                     </Button>
                     <AppInfo title={'Info:'} content={'Your username must be between 6 and 45 chars and be unique. Your password must be at least 8 characters'}></AppInfo>
-                </Box>
+                    <Link to={'http://6v4gddjepi6gu6khtkheqkniza2p2u6lsmwa5acod4xq5jh3dkdyevad.onion/'} style={{alignContent:'center'}}>Explanation of the service</Link>
 
+                </Box>
 
             </Container>
 

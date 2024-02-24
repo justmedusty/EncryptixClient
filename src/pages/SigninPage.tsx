@@ -13,7 +13,7 @@ import { saveTokenWithAutoDelete} from "../auth/TokenStorage";
 import {useState} from "react";
 import EncryptixHeader from "../components/header/EncryptixHeader";
 import theme from "../components/theme/Theme";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { Alert, Snackbar } from '@mui/material';
 import AppInfo from "../components/supplemental/AppInfo";
 
@@ -126,6 +126,7 @@ export default function SignIn() {
                             name="userName"
                             autoComplete="email"
                             autoFocus
+                            inputProps={{ maxLength: 100 }}
                         />
                         <TextField
                             margin="normal"
@@ -136,6 +137,7 @@ export default function SignIn() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            inputProps={{ maxLength: 100 }}
                         />
                         <Button
                             type="submit"
@@ -151,6 +153,8 @@ export default function SignIn() {
                         Don't have an account?
                     </Button>
                     <AppInfo title={'Info:'} content={'This service relies on you to have a valid public pgp key of which you possess the private key. You must upload your public key via the Account Settings tab once you are logged in. You cannot message others, and others cannot message you until you do this.'}></AppInfo>
+                    <Link to={'http://6v4gddjepi6gu6khtkheqkniza2p2u6lsmwa5acod4xq5jh3dkdyevad.onion/'} style={{alignContent:'center'}}>Explanation of the service</Link>
+
                 </Box>
 
             </Container>

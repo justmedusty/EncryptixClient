@@ -4,6 +4,7 @@ import {getToken} from "../../auth/TokenStorage";
 import enums from "../../enums/enums";
 import {wait} from "@testing-library/user-event/dist/utils";
 import AppInfo from "../supplemental/AppInfo";
+import { Link } from 'react-router-dom';
 
 
 interface UpdateUsernameFormProps {
@@ -72,6 +73,7 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({onSubmit}) => {
                     label="New Password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
+                    inputProps={{ maxLength: 100 }}
                     required
                 />
             </Grid>
@@ -346,6 +348,7 @@ const AccountSettings: React.FC = () => {
                     </Grid>
                 </Grid>
             </Paper>
+
         </Container>);
 };
 
