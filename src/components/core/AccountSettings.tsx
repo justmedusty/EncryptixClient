@@ -1,119 +1,146 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Checkbox, Container, Grid, Paper, Tab, Tabs, TextField, Typography} from '@mui/material';
-import {deleteToken, getToken} from "../../auth/TokenStorage";
+import {Alert, Box, Button, Container, Grid, Paper, Snackbar, Tab, Tabs, TextField, Typography} from '@mui/material';
+import {getToken} from "../../auth/TokenStorage";
 import enums from "../../enums/enums";
+import {wait} from "@testing-library/user-event/dist/utils";
 
 
-interface UpdateUsernameFormProps {
-    onSubmit: (data: { newUser: string }) => void;
-}
 
-const UpdateUsernameForm: React.FC<UpdateUsernameFormProps> = ({onSubmit}) => {
-    const [newUser, setNewUser] = useState('');
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        onSubmit({newUser});
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <TextField
-                        variant="outlined"
-                        fullWidth
-                        label="New Username"
-                        value={newUser}
-                        onChange={(e) => setNewUser(e.target.value)}
-                        required
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
-                        Update Username
-                    </Button>
-                </Grid>
-            </Grid>
-        </form>
-    );
-};
-
-interface UpdatePasswordFormProps {
-    onSubmit: (data: { newPassword: string }) => void;
-}
-
-const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({onSubmit}) => {
-    const [newPassword, setNewPassword] = useState('');
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        onSubmit({newPassword});
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <TextField
-                        variant="outlined"
-                        fullWidth
-                        type="password"
-                        label="New Password"
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                        required
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
-                        Update Password
-                    </Button>
-                </Grid>
-            </Grid>
-        </form>
-    );
-};
-
-interface UpdatePublicKeyFormProps {
-    onSubmit: (data: { publicKey: string }) => void;
-}
-
-const UpdatePublicKeyForm: React.FC<UpdatePublicKeyFormProps> = ({onSubmit}) => {
-    const [publicKey, setNewPublicKey] = useState('');
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        onSubmit({publicKey: publicKey});
-    };
-
-    return (
-        <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <TextField
-                        variant="outlined"
-                        fullWidth
-                        label="New Public Key"
-                        multiline
-                        rows={4}
-                        value={publicKey}
-                        onChange={(e) => setNewPublicKey(e.target.value)}
-                        required
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
-                        Update Public Key
-                    </Button>
-                </Grid>
-            </Grid>
-        </form>
-    );
-};
 
 
 const AccountSettings: React.FC = () => {
+    const [success,setSuccess] = useState(false)
+    const [failure,setFailure] = useState(false)
+
+    const resetFailure = async() => {
+        if (failure){
+            await wait(3000)
+        }
+    }
+
+
+
+
+    interface UpdateUsernameFormProps {
+        onSubmit: (data: { newUser: string }) => void;
+    }
+
+
+    const UpdateUsernameForm: React.FC<UpdateUsernameFormProps> = ({onSubmit}) => {
+        const [newUser, setNewUser] = useState('');
+
+        const handleSubmit = async (e: React.FormEvent) => {
+            e.preventDefault();
+            onSubmit({newUser});
+        };
+
+        return (
+            <form onSubmit={handleSubmit}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            label="New Username"
+                            value={newUser}
+                            onChange={(e) => setNewUser(e.target.value)}
+                            required
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button type="submit" variant="contained" color="primary" fullWidth>
+                            Update Username
+                        </Button>
+                    </Grid>
+                </Grid>
+            </form>
+        );
+    };
+
+    interface UpdatePasswordFormProps {
+        onSubmit: (data: { newPassword: string }) => void;
+    }
+
+    const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({onSubmit}) => {
+        const [newPassword, setNewPassword] = useState('');
+
+        const handleSubmit = async (e: React.FormEvent) => {
+            e.preventDefault();
+            onSubmit({newPassword});
+        };
+
+
+
+        return (
+            <form onSubmit={handleSubmit}>
+                <Snackbar open={failure} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+                    <Alert severity="error">Password Change Failed, Must Be 8 Chars +</Alert>
+                </Snackbar>
+                <Snackbar open={success} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+                    <Alert severity="success">Password Changed!</Alert>
+                </Snackbar>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            type="password"
+                            label="New Password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            required
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button type="submit" variant="contained" color="primary" fullWidth>
+                            Update Password
+                        </Button>
+                    </Grid>
+                </Grid>
+            </form>
+        );
+    };
+
+    interface UpdatePublicKeyFormProps {
+        onSubmit: (data: { publicKey: string }) => void;
+    }
+
+    const UpdatePublicKeyForm: React.FC<UpdatePublicKeyFormProps> = ({onSubmit}) => {
+        const [publicKey, setNewPublicKey] = useState('');
+
+
+        const handleSubmit = async (e: React.FormEvent) => {
+            e.preventDefault();
+            onSubmit({publicKey: publicKey});
+        };
+
+        return (
+            <form onSubmit={handleSubmit}>'
+
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            label="New Public Key"
+                            multiline
+                            rows={4}
+                            value={publicKey}
+                            onChange={(e) => setNewPublicKey(e.target.value)}
+                            required
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button type="submit" variant="contained" color="primary" fullWidth>
+                            Update Public Key
+                        </Button>
+                    </Grid>
+                </Grid>
+            </form>
+        );
+    };
+
 
     const handleUsernameSubmit = async ({newUser}: { newUser: string }): Promise<void> => {
         try {
@@ -140,31 +167,6 @@ const AccountSettings: React.FC = () => {
         }
     };
 
-    const handlePasswordSubmit = async ({newPassword}: { newPassword: string }): Promise<void> => {
-        try {
-            const token = await getToken();
-            const formData = new URLSearchParams();
-            formData.append('newPassword', newPassword);
-
-            const response = await fetch(enums.URL + enums.PORT + enums.CHANGE_PASSWORD, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: formData,
-            });
-
-            if (!response.ok) {
-                alert("Error on password update : " + response.statusText)
-            }
-
-            alert("Successfully created password")
-            console.log('Password updated successfully!');
-        } catch (error) {
-            console.error('Error updating password:', error);
-        }
-    };
 
     const handlePublicKeySubmit = async ({publicKey}: { publicKey: string }): Promise<void> => {
         try {
@@ -186,6 +188,7 @@ const AccountSettings: React.FC = () => {
 
 
             }
+
             alert('Public key updated successfully!')
             console.log('Public key updated successfully!');
         } catch (error) {
@@ -199,7 +202,7 @@ const AccountSettings: React.FC = () => {
     };
 
     const ViewPublicKey: React.FunctionComponent = () => {
-        const [publicKey, setPublicKey] = useState();
+        const [publicKey, setPublicKey] = useState("");
         const token = getToken();
 
         useEffect(() => {
@@ -215,7 +218,12 @@ const AccountSettings: React.FC = () => {
                     if (!response.ok) {
                     }
                     const data = await response.json();
-                    setPublicKey(data['Response']);
+                    if (data['Response'] == "null") {
+                        setPublicKey("You do not have a public key uploaded! Please upload a public key so others can message you!");
+                    } else {
+                        setPublicKey(data['Response']);
+                    }
+
                 } catch (error) {
                     alert("an error occurred");
                 }
@@ -225,66 +233,66 @@ const AccountSettings: React.FC = () => {
         }, [token]);
 
 
-        return(
+        return (
             <Container>
-               <Typography>{publicKey}</Typography>
+
+                <Typography sx={{textAlign: 'center'}}>{publicKey}</Typography>
             </Container>
         )
     }
+//This doesn't work in the backend for some reason
+    /*
+        const DeleteAccount: React.FunctionComponent = () => {
+            const [isChecked, setIsChecked] = useState(false);
+            const token = getToken();
+
+                const deleteAccount = async () => {
+                    if (isChecked) {
+                        try {
+                            const response = await fetch(enums.URL + enums.PORT + enums.DELETE_ACCOUNT, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            });
+                            if (!response.ok) {
+                                alert(response.status)
+                            }
+                            else{
+                                alert(response.status)
+                            }
 
 
-    const DeleteAccount: React.FunctionComponent = () => {
-        const [isChecked, setIsChecked] = useState(false);
-        const token = getToken();
-
-            const deleteAccount = async () => {
-                if (isChecked) {
-                    try {
-                        const response = await fetch(enums.URL + enums.PORT + enums.DELETE_ACCOUNT, {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                Authorization: `Bearer ${token}`,
-                            },
-                        });
-                        if (!response.ok) {
-                            alert(response.status)
+                        } catch (error) {
+                            alert("an error occurred");
                         }
-                        else{
-                            alert(response.status)
-                        }
-
-
-                    } catch (error) {
-                        alert("an error occurred");
+                    } else {
+                        alert("You must click the checkbox to confirm before you delete")
                     }
-                } else {
-                    alert("You must click the checkbox to confirm before you delete")
                 }
-            }
-        return(
-            <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <Box sx={{ width: "50%" }}>
-                    <Checkbox onChange={event => setIsChecked(event.target.checked)} checked={isChecked}/>
-                    <Button color="primary" type="button" onClick={deleteAccount}>
-                        Delete
-                    </Button>
-                </Box>
-            </Container>
-        )
-    }
-
+            return(
+                <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <Box sx={{ width: "50%" }}>
+                        <Checkbox onChange={event => setIsChecked(event.target.checked)} checked={isChecked}/>
+                        <Button color="primary" type="button" onClick={deleteAccount}>
+                            Delete
+                        </Button>
+                    </Box>
+                </Container>
+            )
+        }
+    */
     return (
 
         <Container className={'main'} component="main" maxWidth="md">
-            <Paper elevation={3} sx={{ maxWidth: 'xl', margin: 'auto' }}>
-                <Box p={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Paper elevation={3} sx={{maxWidth: 'xl', margin: 'auto'}}>
+                <Box p={2} sx={{display: 'flex', justifyContent: 'center'}}>
                     <Tabs value={tabValue} onChange={handleChange}>
                         <Tab label="Change Username"/>
                         <Tab label="Change Password"/>
                         <Tab label="Change Public Key"/>
                         <Tab label="View Public Key"/>
-                        <Tab label="Delete Account"/>
                     </Tabs>
                 </Box>
                 <Grid container spacing={3}>
@@ -297,13 +305,11 @@ const AccountSettings: React.FC = () => {
                                 {tabValue === 1 && 'Update Password'}
                                 {tabValue === 2 && 'Update Public Key'}
                                 {tabValue === 3 && 'View Public Key'}
-                                {tabValue === 4 && 'Delete Account'}
                             </Typography>
                             {tabValue === 0 && <UpdateUsernameForm onSubmit={handleUsernameSubmit}/>}
                             {tabValue === 1 && <UpdatePasswordForm onSubmit={handlePasswordSubmit}/>}
                             {tabValue === 2 && <UpdatePublicKeyForm onSubmit={handlePublicKeySubmit}/>}
                             {tabValue === 3 && <ViewPublicKey/>}
-                            {tabValue === 4 && <DeleteAccount></DeleteAccount>}
                         </Paper>
                     </Grid>
                 </Grid>
