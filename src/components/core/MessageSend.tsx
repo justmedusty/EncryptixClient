@@ -90,6 +90,7 @@ const MessageSendMenu = () => {
             if (response.ok) {
                 console.log('Message sent successfully');
                 messageSuccess()
+                setMessage('')
             } else {
                 console.error('Failed to send message');
                 messageFailed()
