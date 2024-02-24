@@ -94,11 +94,11 @@ export default function SignUp() {
                         Sign Up
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
-                        <Snackbar open={signUpFailed} autoHideDuration={4000}
+                        <Snackbar className={'snackbar-alert'} open={signUpFailed} autoHideDuration={4000}
                                   anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert severity="error">{errorMessage}</Alert>
                         </Snackbar>
-                        <Snackbar open={signUpSucceeded} autoHideDuration={4000}
+                        <Snackbar className={'snackbar-alert'} open={signUpSucceeded} autoHideDuration={4000}
                                   anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                             <Alert severity="success">Sign Up Success!</Alert>
                         </Snackbar>

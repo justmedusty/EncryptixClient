@@ -113,7 +113,7 @@ export default function SignIn() {
                         Sign in
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
-                        <Snackbar open={loginFailed} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+                        <Snackbar className={'snackbar-alert'} open={loginFailed} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
                             <Alert severity="error">Invalid Credentials Please Try Again</Alert>
                         </Snackbar>
                         <TextField

@@ -102,10 +102,10 @@ const MessageSendMenu = () => {
 
     return (
         <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <Snackbar open={messageSent} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+            <Snackbar className={'custom-snackbar'} open={messageSent} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
                 <Alert severity="success">Message Sent!</Alert>
             </Snackbar>
-            <Snackbar open={messageFailed} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+            <Snackbar className={'custom-snackbar'} open={messageFailed} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
                 <Alert severity="error">Failed to send message, check that you have a public key uploaded and that the recipient has one as well</Alert>
             </Snackbar>
             <Autocomplete
