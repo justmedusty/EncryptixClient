@@ -12,10 +12,20 @@ import {wait} from "@testing-library/user-event/dist/utils";
 const AccountSettings: React.FC = () => {
     const [success,setSuccess] = useState(false)
     const [failure,setFailure] = useState(false)
+    const [newUser, setNewUser] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [publicKey, setNewPublicKey] = useState('');
 
     const resetFailure = async() => {
         if (failure){
             await wait(3000)
+            setFailure(false)
+        }
+    }
+    const resetSuccess = async() => {
+        if (success){
+            await wait(3000)
+            setSuccess(false)
         }
     }
 
@@ -28,7 +38,7 @@ const AccountSettings: React.FC = () => {
 
 
     const UpdateUsernameForm: React.FC<UpdateUsernameFormProps> = ({onSubmit}) => {
-        const [newUser, setNewUser] = useState('');
+
 
         const handleSubmit = async (e: React.FormEvent) => {
             e.preventDefault();
@@ -37,6 +47,7 @@ const AccountSettings: React.FC = () => {
 
         return (
             <form onSubmit={handleSubmit}>
+
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
@@ -44,7 +55,7 @@ const AccountSettings: React.FC = () => {
                             fullWidth
                             label="New Username"
                             value={newUser}
-                            onChange={(e) => setNewUser(e.target.value)}
+                            onChange={(e) => setNewUser(prevUser => e.target.value)}
                             required
                         />
                     </Grid>
@@ -63,7 +74,7 @@ const AccountSettings: React.FC = () => {
     }
 
     const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({onSubmit}) => {
-        const [newPassword, setNewPassword] = useState('');
+
 
         const handleSubmit = async (e: React.FormEvent) => {
             e.preventDefault();
@@ -75,10 +86,10 @@ const AccountSettings: React.FC = () => {
         return (
             <form onSubmit={handleSubmit}>
                 <Snackbar open={failure} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
-                    <Alert severity="error">Password Change Failed, Must Be 8 Chars +</Alert>
+                    <Alert severity="error">Username changed failed, must be unique and at least 6 chars</Alert>
                 </Snackbar>
                 <Snackbar open={success} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
-                    <Alert severity="success">Password Changed!</Alert>
+                    <Alert severity="success">Username Changed!</Alert>
                 </Snackbar>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -107,7 +118,7 @@ const AccountSettings: React.FC = () => {
     }
 
     const UpdatePublicKeyForm: React.FC<UpdatePublicKeyFormProps> = ({onSubmit}) => {
-        const [publicKey, setNewPublicKey] = useState('');
+
 
 
         const handleSubmit = async (e: React.FormEvent) => {
@@ -116,8 +127,13 @@ const AccountSettings: React.FC = () => {
         };
 
         return (
-            <form onSubmit={handleSubmit}>'
-
+            <form onSubmit={handleSubmit}>
+                <Snackbar open={failure} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+                    <Alert severity="error">Public key upload failed, check format </Alert>
+                </Snackbar>
+                <Snackbar open={success} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+                    <Alert severity="success">Public key changed!</Alert>
+                </Snackbar>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
@@ -140,6 +156,34 @@ const AccountSettings: React.FC = () => {
             </form>
         );
     };
+    const handlePasswordSubmit= async ({newPassword}: { newPassword: string }): Promise<void> => {
+        try {
+            const token = getToken();
+            const formData = new URLSearchParams();
+            formData.append('newPassword', newPassword);
+
+            const response = await fetch(enums.URL + enums.PORT + enums.CHANGE_PASSWORD, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                setFailure(true)
+                resetFailure()
+                setNewPassword('')
+            }
+            setSuccess(true)
+            resetSuccess()
+            setNewPassword('')
+        } catch (error) {
+            console.error('Error updating username:', error);
+            alert('Error updating username')
+        }
+    };
 
 
     const handleUsernameSubmit = async ({newUser}: { newUser: string }): Promise<void> => {
@@ -158,9 +202,15 @@ const AccountSettings: React.FC = () => {
             });
 
             if (!response.ok) {
+                setFailure(true)
+                resetFailure()
+                setNewUser('')
+
             }
 
-            alert('Username updated successfully!');
+            setSuccess(true)
+            resetSuccess()
+            setNewUser('')
         } catch (error) {
             console.error('Error updating username:', error);
             alert('Error updating username')
@@ -184,13 +234,16 @@ const AccountSettings: React.FC = () => {
             });
 
             if (!response.ok) {
-                alert("Failed to update public key:" + response.statusText)
-
-
+                setFailure(true)
+                resetFailure()
+                setNewPublicKey('')
+            }
+            else if (response.ok){
+                setSuccess(true)
+                resetSuccess()
+                setNewPublicKey('')
             }
 
-            alert('Public key updated successfully!')
-            console.log('Public key updated successfully!');
         } catch (error) {
             console.error('Error updating public key:', error);
         }
@@ -240,7 +293,7 @@ const AccountSettings: React.FC = () => {
             </Container>
         )
     }
-//This doesn't work in the backend for some reason
+//This doesn't work in the backend for some reason, need to fix but don't feel like it right now since not super important
     /*
         const DeleteAccount: React.FunctionComponent = () => {
             const [isChecked, setIsChecked] = useState(false);
