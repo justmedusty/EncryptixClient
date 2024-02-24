@@ -17,16 +17,12 @@ const AccountSettings: React.FC = () => {
     const [publicKey, setNewPublicKey] = useState('');
 
     const resetFailure = async() => {
-        if (failure){
             await wait(3000)
             setFailure(false)
-        }
     }
     const resetSuccess = async() => {
-        if (success){
             await wait(3000)
             setSuccess(false)
-        }
     }
 
 
@@ -43,10 +39,17 @@ const AccountSettings: React.FC = () => {
         const handleSubmit = async (e: React.FormEvent) => {
             e.preventDefault();
             onSubmit({newUser});
+
         };
 
         return (
             <form onSubmit={handleSubmit}>
+                <Snackbar open={failure} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+                    <Alert severity="error">Username changed failed, must be unique and at least 6 chars</Alert>
+                </Snackbar>
+                <Snackbar open={success} autoHideDuration={4000} anchorOrigin={{vertical:'top', horizontal:'center'}}>
+                    <Alert severity="success">Username Changed!</Alert>
+                </Snackbar>
 
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -55,7 +58,7 @@ const AccountSettings: React.FC = () => {
                             fullWidth
                             label="New Username"
                             value={newUser}
-                            onChange={(e) => setNewUser(prevUser => e.target.value)}
+                            onChange={(e) => setNewUser(e.target.value)}
                             required
                         />
                     </Grid>
@@ -79,6 +82,7 @@ const AccountSettings: React.FC = () => {
         const handleSubmit = async (e: React.FormEvent) => {
             e.preventDefault();
             onSubmit({newPassword});
+            setNewPassword('')
         };
 
 
@@ -124,6 +128,7 @@ const AccountSettings: React.FC = () => {
         const handleSubmit = async (e: React.FormEvent) => {
             e.preventDefault();
             onSubmit({publicKey: publicKey});
+            setNewPublicKey('')
         };
 
         return (
@@ -174,11 +179,13 @@ const AccountSettings: React.FC = () => {
             if (!response.ok) {
                 setFailure(true)
                 resetFailure()
-                setNewPassword('')
+
             }
-            setSuccess(true)
-            resetSuccess()
-            setNewPassword('')
+            else if (response.ok){
+                setSuccess(true)
+                resetSuccess()
+            }
+
         } catch (error) {
             console.error('Error updating username:', error);
             alert('Error updating username')
@@ -204,13 +211,12 @@ const AccountSettings: React.FC = () => {
             if (!response.ok) {
                 setFailure(true)
                 resetFailure()
-                setNewUser('')
-
+            }
+            else if (response.ok){
+                setSuccess(true)
+                resetSuccess()
             }
 
-            setSuccess(true)
-            resetSuccess()
-            setNewUser('')
         } catch (error) {
             console.error('Error updating username:', error);
             alert('Error updating username')
@@ -220,7 +226,7 @@ const AccountSettings: React.FC = () => {
 
     const handlePublicKeySubmit = async ({publicKey}: { publicKey: string }): Promise<void> => {
         try {
-            const token = await getToken();
+            const token = getToken();
             const formData = new URLSearchParams();
             formData.append('publicKey', publicKey);
 
@@ -236,12 +242,11 @@ const AccountSettings: React.FC = () => {
             if (!response.ok) {
                 setFailure(true)
                 resetFailure()
-                setNewPublicKey('')
+
             }
             else if (response.ok){
                 setSuccess(true)
                 resetSuccess()
-                setNewPublicKey('')
             }
 
         } catch (error) {
