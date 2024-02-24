@@ -16,6 +16,7 @@ import {useNavigate} from 'react-router-dom';
 import {Alert, Snackbar, SnackbarContent} from "@mui/material";
 import {wait} from "@testing-library/user-event/dist/utils";
 import {Info} from "@mui/icons-material";
+import AppInfo from "../components/supplemental/AppInfo";
 
 const defaultTheme = theme
 
@@ -133,6 +134,7 @@ export default function SignUp() {
                     <Button href="/login" variant="contained">
                         Already have an account?
                     </Button>
+                    <AppInfo title={'Info:'} content={'Your username must be between 6 and 45 chars and be unique. Your password must be at least 8 characters'}></AppInfo>
                 </Box>
 
 

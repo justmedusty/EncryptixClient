@@ -13,6 +13,7 @@ import {getToken} from "../../auth/TokenStorage";
 import {Button} from "@mui/material";
 import {Quickreply, ReplyAll, ReplyOutlined, ReplyRounded, ReplySharp, ReplyTwoTone} from "@mui/icons-material";
 import theme from "../theme/Theme";
+import AppInfo from "../supplemental/AppInfo";
 
 interface Message {
     timeSent: number[];
@@ -141,6 +142,7 @@ const MessageList: React.FC = () => {
             ) : (
                 <>
                     <div>
+
                         <List>
                             {messages.map((message) => (
                                 <ListItem key={message.timeSent.join('-')}>
@@ -148,9 +150,7 @@ const MessageList: React.FC = () => {
                                         secondary={`Sent at: ${(message.timeSent.join('-'))}`}
                                         primary={`From: ${message.senderUserName}`}/>
                                     <ListItemSecondaryAction>
-                                        <IconButton style={{marginLeft: '5px'}}>t
-                                            <ReplyTwoTone/>
-                                        </IconButton>
+
 
 
                                         <IconButton
@@ -172,6 +172,7 @@ const MessageList: React.FC = () => {
                             </Button>
                             <Button onClick={handleNextPage}>Next Page</Button>
                         </div>
+                        <AppInfo title={'Info:'} content={'These messages have been encrypted using your uploaded public key. To see a message, click the download icon to download the file and decrypt locally using your locally stored private key.'}></AppInfo>
                     </div>
                 </>
             )}
@@ -182,5 +183,7 @@ const MessageList: React.FC = () => {
 export default MessageList;
 
 /*
-
+   <IconButton style={{marginLeft: '5px'}}>t
+                                            <ReplyTwoTone/>
+                                        </IconButton>
  */

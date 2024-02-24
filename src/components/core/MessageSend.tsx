@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import enums from "../../enums/enums";
 import {Alert, Autocomplete, Button, debounce, MenuItem, Snackbar, TextField} from "@mui/material";
 import {getToken} from "../../auth/TokenStorage";
+import AppInfo from "../supplemental/AppInfo";
 
 const MessageSendMenu = () => {
     const [receiver, setReceiver] = useState('');
@@ -139,6 +140,7 @@ const MessageSendMenu = () => {
                 style={{marginBottom: '20px', width:'800px' ,minHeight: '300px'}}
             />
             <Button variant="contained" onClick={sendMessage}>Send Message</Button>
+            <AppInfo title={'Info:'} content={'The Receiver field will autocomplete with available usernames matching your query. Keep in mind, if either you or the person you are trying to message does not have a public key uploaded, your message cannot be sent.'}></AppInfo>
         </div>
     );
 };

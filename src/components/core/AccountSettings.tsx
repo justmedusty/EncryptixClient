@@ -3,6 +3,7 @@ import {Alert, Box, Button, Container, Grid, Paper, Snackbar, Tab, Tabs, TextFie
 import {getToken} from "../../auth/TokenStorage";
 import enums from "../../enums/enums";
 import {wait} from "@testing-library/user-event/dist/utils";
+import AppInfo from "../supplemental/AppInfo";
 
 
 interface UpdateUsernameFormProps {
@@ -48,6 +49,7 @@ const UpdatePublicKeyForm: React.FC<UpdatePublicKeyFormProps> = ({onSubmit}) => 
                 </Button>
             </Grid>
         </Grid>
+        <AppInfo title={'Info:'} content={'Must be full public key with header and footer, if you upload a key of which you do not have the private key you cannot decrypt your messages'}></AppInfo>
     </form>);
 };
 const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({onSubmit}) => {
@@ -79,6 +81,7 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({onSubmit}) => {
                 </Button>
             </Grid>
         </Grid>
+        <AppInfo title={'Info:'} content={'Your password must be 8 chars or more'}></AppInfo>
     </form>);
 };
 const UpdateUsernameForm: React.FC<UpdateUsernameFormProps> = ({onSubmit}) => {
@@ -110,6 +113,7 @@ const UpdateUsernameForm: React.FC<UpdateUsernameFormProps> = ({onSubmit}) => {
                 </Button>
             </Grid>
         </Grid>
+        <AppInfo title={'Info:'} content={'Your username must be between 6 and 45 chars and be unique'}></AppInfo>
     </form>);
 };
 

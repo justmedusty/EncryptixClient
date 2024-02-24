@@ -15,6 +15,7 @@ import EncryptixHeader from "../components/header/EncryptixHeader";
 import theme from "../components/theme/Theme";
 import {useNavigate} from "react-router-dom";
 import { Alert, Snackbar } from '@mui/material';
+import AppInfo from "../components/supplemental/AppInfo";
 
 
 
@@ -149,6 +150,7 @@ export default function SignIn() {
                     <Button href="/signup" variant="contained">
                         Don't have an account?
                     </Button>
+                    <AppInfo title={'Info:'} content={'This service relies on you to have a valid public pgp key of which you possess the private key. You must upload your public key via the Account Settings tab once you are logged in. You cannot message others, and others cannot message you until you do this.'}></AppInfo>
                 </Box>
 
             </Container>
