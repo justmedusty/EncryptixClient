@@ -19,7 +19,7 @@ export const getToken = (): string | null => {
     const tokenData = JSON.parse(tokenDataString);
 
     // Check if the token is older than 5 minutes (300,000 milliseconds)
-    const isTokenExpired = Date.now() - tokenData.timestamp > 300000;
+    const isTokenExpired = Date.now() - tokenData.timestamp > 900000;
 
     if (isTokenExpired) {
         // Token is older than 5 minutes, delete it

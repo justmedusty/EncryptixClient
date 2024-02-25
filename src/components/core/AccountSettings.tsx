@@ -1,10 +1,22 @@
 import React, {useEffect, useState} from 'react';
-import {Alert, Box, Button, Container, Grid, Paper, Snackbar, Tab, Tabs, TextField, Typography} from '@mui/material';
-import {getToken} from "../../auth/TokenStorage";
+import {
+    Alert,
+    Box,
+    Button,
+    Checkbox,
+    Container,
+    Grid,
+    Paper,
+    Snackbar,
+    Tab,
+    Tabs,
+    TextField,
+    Typography
+} from '@mui/material';
+import {deleteToken, getToken} from "../../auth/TokenStorage";
 import enums from "../../enums/enums";
 import {wait} from "@testing-library/user-event/dist/utils";
 import AppInfo from "../supplemental/AppInfo";
-import { Link } from 'react-router-dom';
 
 
 interface UpdateUsernameFormProps {
@@ -50,7 +62,8 @@ const UpdatePublicKeyForm: React.FC<UpdatePublicKeyFormProps> = ({onSubmit}) => 
                 </Button>
             </Grid>
         </Grid>
-        <AppInfo title={'Info:'} content={'Must be full public key with header and footer, if you upload a key of which you do not have the private key you cannot decrypt your messages'}></AppInfo>
+        <AppInfo title={'Info:'}
+                 content={'Must be full public key with header and footer, if you upload a key of which you do not have the private key you cannot decrypt your messages'}></AppInfo>
     </form>);
 };
 const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({onSubmit}) => {
@@ -73,7 +86,7 @@ const UpdatePasswordForm: React.FC<UpdatePasswordFormProps> = ({onSubmit}) => {
                     label="New Password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    inputProps={{ maxLength: 100 }}
+                    inputProps={{maxLength: 100}}
                     required
                 />
             </Grid>
@@ -258,54 +271,69 @@ const AccountSettings: React.FC = () => {
         </Container>)
     }
 //This doesn't work in the backend for some reason, need to fix but don't feel like it right now since not super important
-    /*
-        const DeleteAccount: React.FunctionComponent = () => {
-            const [isChecked, setIsChecked] = useState(false);
-            const token = getToken();
+    const DeleteAccount: React.FunctionComponent = () => {
+        const [isChecked, setIsChecked] = useState(false)
+        const [notChecked, setNotChecked] = useState(false)
+        const token = getToken();
 
-                const deleteAccount = async () => {
-                    if (isChecked) {
-                        try {
-                            const response = await fetch(enums.URL + enums.PORT + enums.DELETE_ACCOUNT, {
-                                method: 'DELETE',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    Authorization: `Bearer ${token}`,
-                                },
-                            });
-                            if (!response.ok) {
-                                alert(response.status)
-                            }
-                            else{
-                                alert(response.status)
-                            }
+        const resetNotChecked = async () => {
+            if (notChecked) {
+                wait(4000)
+                setNotChecked(false)
+            }
+        }
 
-
-                        } catch (error) {
-                            alert("an error occurred");
-                        }
-                    } else {
-                        alert("You must click the checkbox to confirm before you delete")
+        const deleteAccount = async () => {
+            if (isChecked) {
+                try {
+                    const response = await fetch(enums.URL + enums.PORT + enums.DELETE_ACCOUNT, {
+                        method: 'DELETE', headers: {
+                            'Content-Type': 'application/json', Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    if (!response.ok) {
+                        alert(response.json())
+                    } else if (response.ok) {
+                        deleteToken()
                     }
+
+
+                } catch (error) {
+                    alert("an error occurred");
                 }
-            return(
-                <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <Box sx={{ width: "50%" }}>
-                        <Checkbox onChange={event => setIsChecked(event.target.checked)} checked={isChecked}/>
-                        <Button color="primary" type="button" onClick={deleteAccount}>
+            } else {
+                setNotChecked(true)
+                await resetNotChecked()
+            }
+        }
+        return (<Container maxWidth="sm" sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                <Snackbar open={notChecked} className={'snackbar-alert'} autoHideDuration={6000}
+                          anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
+                    <Alert severity="error">Check to box to confirm deletion</Alert>
+                </Snackbar>
+                <Box sx={{width: "50%", textAlign: 'center'}}>
+
+                    <Box sx={{display: 'flex', alignItems: 'center', mt: 2}}>
+                        <Checkbox sx={{mr: 1}} onChange={event => setIsChecked(event.target.checked)}
+                                  checked={isChecked}/>
+                        <Typography variant="body1" sx={{mr: 6, fontWeight: 'bold'}}>Confirm</Typography>
+                        <Button color="primary" variant="contained" type="button" onClick={deleteAccount}>
                             Delete
                         </Button>
                     </Box>
-                </Container>
-            )
-        }
-    */
+                    <AppInfo title={'Info'}
+                             content={'Select the checkmark to confirm you want to delete your account. This will also delete all messages addressed to you.'}/>
+                </Box>
+            </Container>)
+    }
+
     return (
 
         <Container className={'main'} component="main" maxWidth="md">
             <Paper elevation={3} sx={{maxWidth: 'xl', margin: 'auto'}}>
                 <Box p={2} sx={{display: 'flex', justifyContent: 'center'}}>
-                    <Snackbar className={'snackbar-alert'} open={failure} autoHideDuration={6000} anchorOrigin={{vertical: 'top', horizontal: 'center'}} >
+                    <Snackbar className={'snackbar-alert'} open={failure} autoHideDuration={6000}
+                              anchorOrigin={{vertical: 'top', horizontal: 'center'}}>
                         <Alert severity="error">
                             <div>
                                 <p>Change failed. Please ensure that your request meets the specified criteria:</p>
@@ -328,6 +356,7 @@ const AccountSettings: React.FC = () => {
                         <Tab label="Change Password"/>
                         <Tab label="Change Public Key"/>
                         <Tab label="View Public Key"/>
+                        <Tab label="Delete Account"/>
                     </Tabs>
                 </Box>
                 <Grid container spacing={3}>
@@ -339,11 +368,13 @@ const AccountSettings: React.FC = () => {
                                 {tabValue === 1 && 'Update Password'}
                                 {tabValue === 2 && 'Update Public Key'}
                                 {tabValue === 3 && 'View Public Key'}
+                                {tabValue === 4 && 'Delete Account'}
                             </Typography>
                             {tabValue === 0 && <UpdateUsernameForm onSubmit={handleUsernameSubmit}/>}
                             {tabValue === 1 && <UpdatePasswordForm onSubmit={handlePasswordSubmit}/>}
                             {tabValue === 2 && <UpdatePublicKeyForm onSubmit={handlePublicKeySubmit}/>}
                             {tabValue === 3 && <ViewPublicKey/>}
+                            {tabValue === 4 && <DeleteAccount/>}
                         </Paper>
                     </Grid>
                 </Grid>
